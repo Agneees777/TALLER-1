@@ -1,0 +1,207 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage{ragged2e}
+
+\title{Taller 1}
+\author{Guillen García Marieth y Hernandez Lopez Idalia} 
+\date{Agosto 16, 2022}
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Elementos de datos estructurados}
+
+Los datos proceden de muchas fuentes: mediciones de sensores, eventos, textos, imágenes y videos. El Internet de las Cosas (IoT) está arrojando flujos de información. Gran parte de estos datos no están estructurados: las imágenes son una colección de píxeles, y cada píxel contiene información de color RGB (rojo, verde, azul). Los textos son secuencias de palabras y caracteres no verbales, a menudo organizados por secciones, subsecciones, etc. Los flujos de clics son secuencias de acciones de un usuario que interactúa con una aplicación o una página web. De hecho, uno de los propósitos principales de la ciencia de los datos es aprovechar este torrente de datos en bruto para convertirlos en información procesable. Para aplicar los conceptos estadísticos tratados en este libro, los datos brutos no estructurados deben ser procesados y manipulados en una forma estructurada. Una de las formas más comunes de datos estructurados es una tabla con filas y columnas de una base de datos relacional o recogida para un estudio. \\
+
+Hay dos tipos básicos de datos estructurados: numéricos y categóricos. Los datos numéricos se presentan de dos formas: continuos, como la velocidad del viento o la duración del tiempo, y discretos como el recuento de la ocurrencia de un evento. Los datos categóricos sólo toman un conjunto fijo de valores, como un tipo de pantalla de televisión (plasma, LCD, LED, etc.) o el nombre de un estado (Alabama, Alaska, etc.). Los datos binarios son un caso especial importante de datos categóricos que toman sólo uno de dos valores, como 0/1, sí/no, o verdadero/falso. Otro tipo útil de datos categóricos son los datos ordinales en los que las categorías están ordenadas; un ejemplo de esto es una calificación numérica (1, 2, 3, 4 o 5).\\
+
+¿Por qué nos molestamos en hacer una taxonomía de los tipos de datos? Resulta que, a efectos de análisis de datos y modelos predictivos, el tipo de datos es importante para ayudar a determinar el tipo de presentación visual, el análisis de datos o el modelo estadístico. De hecho, los software de ciencia de datos, como R y Python, utilizan estos tipos de datos para mejorar el rendimiento computacional. Más importante aún, el tipo de datos de una variable determina cómo el software manejará los cálculos para esa variable.\\
+
+{\centering
+     \includegraphics[scale=0.39]{tabla1.png}
+    }
+\\
+Los ingenieros de software y los programadores de bases de datos pueden preguntarse por qué necesitamos la noción de datos categóricos y ordinales para la analítica. Después de todo, las categorías no son más que una de valores de texto (o numéricos), y la base de datos subyacente facilita automáticamente la representación interna. Sin embargo, la identificación explícita de los datos como categóricos a diferencia del texto, ofrece algunas ventajas:
+
+\begin{itemize}
+    \item 
+Saber que los datos son categóricos puede actuar como una señal que indique al software cómo deben comportarse los procedimientos estadísticos, como la elaboración de un gráfico o el ajuste de un modelo. En particular, los datos ordinales pueden representarse como un factor ordenado en R, preservando un orden especificado por el usuario en gráficos, tablas y modelos. En Python, scikit-learn soporta datos ordinales con el sklearn.preprocessing.OrdinalEncoder. 
+    \item El almacenamiento y la indexación pueden optimizarse (como en una base de datos relacional).
+    \item Los posibles valores que puede tomar una variable categórica se imponen en el software (como un enunciado).
+    
+\end{itemize}
+
+La tercera "ventaja" puede conducir a un comportamiento no deseado o inesperado: el comportamiento por defecto de las funciones de importación de datos en R (por ejemplo, read.csv) es convertir automáticamente una columna de texto en un factor. Las operaciones posteriores en esa columna asumirán que los únicos valores permitidos para esa columna son los importados originalmente, y la asignación de un nuevo valor de texto introducirá una advertencia y producirá un NA (valor perdido). El paquete pandas en Python no hará tal conversión automáticamente. Sin embargo, puede especificar una columna como categórica explícitamente en la función read\_csv.\\
+
+{\centering
+     \includegraphics[scale=0.43]{tabla2.png}
+    }
+
+\subsection*{Lecturas adicionales}
+\begin{itemize}
+    \item  La documentación de pandas describe los diferentes tipos de datos y cómo pueden ser manipulados en Python.
+    \item  Los tipos de datos pueden ser confusos, ya que los tipos pueden solaparse, y la taxonomía en un software puede diferir de la de otro. El sitio web R Tutorial cubre la taxonomía de R. La documentación de pandas describe los diferentes tipos de datos y cómo se pueden manipular en Python.
+    \item Las bases de datos son más detalladas en su clasificación de tipos de datos, incorporando consideraciones de niveles de precisión, campos de longitud fija o variable, y más; ver la guía de SQL de W3Schools.
+\end{itemize}
+
+\subsection*{Datos rectangulares}
+El marco de referencia típico para un análisis en ciencia de datos es un objeto de datos rectangular, como una hoja de cálculo o una tabla de base de datos. Datos rectangulares es el término general para una matriz bidimensional con filas que indican registros (casos) y columnas que indican características (variables); marco de datos es el formato específico en R y Python. Los datos no siempre comienzan de esta forma: los datos no estructurados (por ejemplo, texto) deben ser procesados y manipulados para que puedan ser representados como un conjunto de características en el marco de datos rectangulares. Conjunto de características en los datos rectangulares (véase "Elementos de los datos estructurados" en la página 2). Los datos de las bases de datos relacionales deben extraerse y colocarse en una única tabla para la mayoría de tareas de análisis y modelado de datos.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Medidas de tendencia central y dispersión}
+\subsection*{Medidas de tendencia central}
+Las medidas de Tendencia Central son parámetros estadísticos que informan sobre el centro de la distribución de la muestra o población estadística. Se les llama medidas de tendencia central porque sirven para conocer en qué lugar se ubica el elemento promedio, o típico del grupo. Este tipo de medidas sirven para comparar los resultados con otros grupos, atendiendo a estas mismas medidas de tendencia central. Varios conceptos estadísticos se refieren a la "media" de los datos, pero la elección correcta depende de la naturaleza y la escala de los datos, así como del objeto de estudio. 
+
+\subsection*{Media aritmética}
+La media es el valor promedio de un conjunto de datos numéricos, calculada como la suma del conjunto de valores dividida entre el número total de valores. A continuación se muestra la fórmula de la media aritmética:
+{\centering
+     \includegraphics[scale=0.8]{media.png}
+    }
+
+\subsection*{Mediana y cuantiles}
+La mediana es el valor que divide las observaciones en dos partes iguales, de manera que al menos el 50\% de los valores son mayores  o iguales a la mediana y que 50\% de los valores sean menores  o iguales a la mediana. 
+La mediana divide la distribución en dos partes con igual nº de datos, si la dividimos en cuatro partes obtenemos los cuartiles, 1º, 2º y 3º, que se indican respectivamente Q1, Q2 y Q3.
+Ordenados los datos, el primer cuartil, es mayor que el 25\% de estos; el tercer cuartil, mayor que el 75\%, y el segundo coincide con la mediana.\\
+ 
+\centering
+    \includegraphics[scale=0.3]{mediana.png} \\
+    
+\justifying    
+
+\subsection*{Gráficos cuantiles-cuantiles}
+Los diagramas cuantil-cuantil son una herramienta de exploración utilizada para evaluar las similitudes entre la distribución de una variable numérica y una distribución normal, o entre las distribuciones de dos variables numéricas. Si se trazan los cuantiles de dos variables entre sí, se obtiene un Quantile- Quantile (QQ-plot). Esto proporciona un resumen sencillo de si las distribuciones de las dos variables son similares con respecto a su ubicación o no.\\
+    
+\centering
+    \includegraphics[scale=0.6]{quantilgrafico.png} \\
+
+\justifying
+\subsection*{Moda}
+La moda en una distribución estadística es el valor de la variable que más se repite y el de mayor frecuencia absoluta. La moda no es única, puesto que puede haber dos o más valores de la variable que tengan la misma frecuencia siendo esta máxima. En cuyo caso tendremos una distribución bimodal o polimodal según el caso.
+     
+\centering
+    \includegraphics[scale=0.5]{moda.png} \\
+
+
+\justifying
+\subsection*{Media geométrica}
+La media geométrica es un tipo de media que se calcula como la raíz del producto de un conjunto de números estrictamente positivos. Es recomendada para datos de progresión geométrica, para promediar razones, porcentajes tasas de interés, interés compuesto y números de índices.
+    
+\centering
+    \includegraphics[scale=0.5]{mediaGeometrica.png} \\
+
+
+\justifying
+\subsection*{Media armónica}
+La media armónica sirve para calcular promedios o tiempos, se utiliza frecuentemente en el cálculo medio de precios o porcentajes, también en situaciones en las que hay que promediar trayectos de igual longitud con diferentes tiempos, así como para promediar múltiplos o cocientes.
+
+\centering
+    \includegraphics[scale=0.5]{mediaArmónica.png} \\ 
+\centering  
+Cabe destacar que N es el número de elementos sobre los cuales se calcula la media.\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\justifying
+\section*{Medidas de dispersión}
+Las medidas de dispersión tratan, a través del cálculo de diferentes fórmulas, de arrojar un valor numérico que ofrezca información sobre el grado de variabilidad de una variable.
+En otras palabras, las medidas de dispersión son números que indican si una variable se mueve mucho, poco, más o menos que otra. La razón de ser de este tipo de medidas es conocer de manera resumida una característica de la variable estudiada. En este sentido, deben acompañar a las medidas de tendencia central. Juntas, ofrecen información de un sólo vistazo que luego podremos utilizar para comparar y, si fuera preciso, tomar decisiones.
+
+\subsection*{Rango}
+El rango es un valor numérico que indica la diferencia entre el valor máximo y el mínimo de una población o muestra estadística.
+El rango suele ser utilizado para obtener la dispersión total. Es decir, si tenemos una muestra con dos observaciones: 10 y 100 euros, el rango será de 90 euros.
+
+\centering
+    \includegraphics[scale=0.5]{rango.png} \\ 
+
+\justifying
+\subsection*{Rango intercuartílico}
+La forma abreviada de nombrar al rango intercuartílico es RIC o RQ. 
+El rango intercuartílico es un medida de dispersión de un conjunto de datos que expresa la diferencia o la distancia entre el primer y el tercer cuartil.
+En otras palabras, el rango intercuartílico es la diferencia entre el penúltimo y el primer cuartil de una distribución utilizado en el diagrama de caja. Generalmente utilizado en el diagrama de caja que utiliza la mediana como medida central.
+
+
+\justifying
+\subsection*{Desviación absoluta}
+Esta desviación muestra la variación que tiene cada uno de los datos de un grupo con respecto a su media aritmética, lo que nos permitirá determinar que tan homogéneo es el grupo de datos.
+Dado que estamos interesados en analizar la dispersión de los datos, resulta natural fijarnos en la diferencia que tiene cada uno de estos valores respecto a la media. Es decir, ¿cuánto se aleja cada observación respecto del promedio? Como algunos valores estarán por encima de la media, y otros por debajo de ésta, algunas de las diferencias serán positivas y otras negativas, aunque van a estar equilibradas, es decir, van a sumar 0.
+
+\justifying
+\subsection*{Varianza}
+La varianza es una medida de dispersión que representa la variabilidad de una serie de datos respecto a su media. Formalmente se calcula como la suma de los residuos al cuadrado divididos entre el total de observaciones.
+Antes de ver la fórmula de la varianza, debemos decir que la varianza en estadística es muy importante. Ya que aunque se trata de una medida sencilla, puede aportar mucha información sobre una variable en concreto.\\
+
+\centering
+    \includegraphics[scale=0.5]{varianza.png} \\ 
+\centering
+fórmula
+
+\justifying
+\subsection*{Desviación estándar}
+La desviación estándar es la medida de dispersión más común, que indica qué tan dispersos están los datos con respecto a la media. Mientras mayor sea la desviación estándar, mayor será la dispersión de los datos. También se puede utilizar para establecer un valor de referencia para estimar la variación general de un proceso.
+
+\justifying
+\subsection*{Coeficiente de variación}
+El coeficiente de variación, también denominado como coeficiente de variación de Pearson, es una medida estadística que nos informa acerca de la dispersión relativa de un conjunto de datos. Es decir, nos informa al igual que otras medidas de dispersión, si una variable se mueve mucho, poco, más o menos que otra.\\
+
+\centering
+    \includegraphics[scale=0.5]{VariacionCoeficiente.png}\\
+\centering
+Ecuación
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\justifying
+\section*{Diagrama de cajas}
+El gráfico de caja es una representación de una variable cuantitativa o categórica con el propósito de identificar rápidamente los cuartiles del conjunto de datos, es un gráfico sencillo y potente que resume la distribución de una variable continua u ordinal utilizando su mediana, cuarties, mínimo, máximo y valores extremos.
+
+
+\centering
+    \includegraphics[scale=0.5]{xbox.png}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\justifying
+\section*{Medidas de concentración}
+Las medida de concentración es un concepto completamente diferente utilizado para describir una variable cuantitativa ideal de concentración, en general, se denomina concentración a la mayor o menor equidad en el reparto de la suma total de la variable considerada.\\
+\subsection*{Curva de Lorenz}
+La curva de Lorenz es un método popular para representar gráficamente las concentraciones es un gráfico utilizado frecuentemente para plasmar la distribución relativa de una variable en un dominio determinado.\\
+
+\centering
+   \includegraphics[scale=0.5]{ThecurvLorenz.png} 
+
+
+\justifying
+\subsection*{Indice de Gini}
+El Coeficiente de Gini se basa en la Curva de Lorenz, que es una representación gráfica de una función de distribución acumulada se utiliza como una herramienta analítica que suele emplearse para medir la concentración de ingresos entre los habitantes de una región, en un periodo de tiempo determinado.\\
+
+\centering
+   \includegraphics[scale=0.6]{xdFormulaGini.png} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\justifying
+\section{Posit™}
+\justifying
+\subsection*{¿Que relación tiene PositTM con RStudio?}
+Primero queremos aclarar que es positTM ,John L. Gustafson introdujo un nuevo tipo de datos llamado positTM para representar números reales en computadores. Este formato emergente fue diseñado con el objetivo de reemplazar a los números de coma flotante IEEE 754 proporcionando ciertas ventajas sobre ellos, como un mayor rango dinámico, mayor precisión, resultados idénticos bit a bit en todos los sistemas o un hardware más simple, entre otras
+La relación con RStudio seria que R declaro que Posit es el nuevo nombre de RStudio ellos declararon que “ Al considerar un nuevo nombre para la empresa, queríamos algo que reflejara tanto el trabajo que realiza nuestra comunidad (¡probar hipótesis!) como la aspiración científica de construir niveles de conocimiento y comprensión cada vez mayores.”
+\\
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\justifying
+\subsection*{Bibliografia}
+\begin{itemize}
+    \item Peter Bruce, Andrew Bruce, and Peter Gedeck. (mayo 2020). Practical Statistics for Data Scientists 50+ Essential Concepts Using R and Python. United States of America.: by O’Reilly Media, Inc., 1005 Gravenstein Highway North, Sebastopol, CA 95472.
+
+    \item Christian Heumann y Michael Schomaker Shalabh. (2016). Introduction to Statistics and Data Analysis With Exercises, Solutions and Applications in R. Gewerbestrasse 11, 6330 Cham, Switzerland: Springer International Publishing Switzerland.
+
+    \item JJ  Allaire y Hadley Wickham. (27 de julio). RStudio se está convirtiendo en Posit. 13 de agosto 2022, de RStudio Sitio web: https://www.rstudio.com/authors/hadley-wickham/
+
+    \item Murillo Montero, Raúl (2021) Leveraging Posit Arithmetic in Deep Neural Networks. [Trabajo Fin de Máster]https://eprints.ucm.es/id/eprint/64587/\\
+    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
